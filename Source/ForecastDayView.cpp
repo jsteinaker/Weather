@@ -108,7 +108,7 @@ ForecastDayView::Draw(BRect urect)
 {
 	BFont labelFont = be_bold_font;
 	font_height finfo;
-	labelFont.SetSize(12);
+	labelFont.SetSize(labelFont.Size() * 1.2);
 	labelFont.GetHeight(&finfo);
 	SetFont(&labelFont);
 	rgb_color boxColor;
@@ -159,7 +159,7 @@ ForecastDayView::Draw(BRect urect)
 	DrawString(fDayLabel);
 
 	BFont tempFont = be_plain_font;
-	tempFont.SetSize(15);
+	tempFont.SetSize(tempFont.Size() * 1.1);
 	tempFont.GetHeight(&finfo);
 	SetFont(&tempFont);
 	SetLowColor(tint_color(ViewColor(), 0.7));
@@ -182,7 +182,8 @@ ForecastDayView::Draw(BRect urect)
 	MovePenTo((Bounds().Width() - StringWidth(lowString)) / 2,
 		boxRect.bottom - (finfo.descent + finfo.leading) - 5);
 
-	tempFont.SetSize(14);
+	//tempFont.SetSize(fontSize * 0.95);
+	tempFont.GetHeight(&finfo);
 	SetFont(&tempFont);
 
 	DrawString(lowString);

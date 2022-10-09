@@ -25,7 +25,7 @@
 #include "PreferencesWindow.h"
 #include "CitiesListSelectionWindow.h"
 
-const BRect kDefaultMainWindowRect = BRect(150, 150, 0, 0);
+const BRect kDefaultMainWindowRect = BRect(150, 150, 500, 500);
 const uint32 kCitySelectionMessage = 'SelC';
 const uint32 kOpenPreferencesMessage = 'OPrf';
 const uint32 kToggleDeskbarReplicantMessage = 'TDkB';

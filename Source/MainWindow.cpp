@@ -25,6 +25,7 @@
 #include <Alert.h>
 #include <Deskbar.h>
 #include <Roster.h>
+#include <Screen.h>
 
 #include "ForecastDeskbarView.h"
 #include "ForecastView.h"
@@ -66,8 +67,7 @@ MainWindow::_PrepareMenuBar(void)
 MainWindow::MainWindow()
 	:
 	BWindow(BRect(150, 150, 0, 0), B_TRANSLATE_SYSTEM_NAME("Weather"),
-		B_TITLED_WINDOW,
-		B_NOT_RESIZABLE | B_NOT_ZOOMABLE | B_ASYNCHRONOUS_CONTROLS
+		B_TITLED_WINDOW, B_NOT_ZOOMABLE | B_ASYNCHRONOUS_CONTROLS
 			| B_QUIT_ON_WINDOW_CLOSE | B_AUTO_UPDATE_SIZE_LIMITS),
 	fSelectionWindow(NULL),
 	fPreferencesWindow(NULL)
@@ -85,9 +85,13 @@ MainWindow::MainWindow()
 		fMainWindowRect = kDefaultMainWindowRect;
 
 	MoveTo(fMainWindowRect.LeftTop());
-
-
-	fForecastView = new ForecastView(BRect(0, 0, 100, 100), &settings);
+	
+	BScreen* screen = new BScreen(this);
+	BRect screenFrame = screen->Frame();
+	ResizeToPreferred();
+		
+	fForecastView = new ForecastView(BRect(0, 0, screenFrame.Width() / 3, screenFrame.Height() / 3),
+		&settings);
 	AddChild(fForecastView);
 	// Enable when works
 	// fShowForecastMenuItem->SetMarked(fForecastView->ShowForecast());
@@ -101,17 +105,19 @@ MainWindow::MessageReceived(BMessage* msg)
 		case kUpdateCityMessage:
 		{
 
-			BString cityName;
+			BString cityName, cityLongName;
 			int32 cityId;
 			double latitude, longitude;
 
 			msg->FindString("city", &cityName);
+			msg->FindString("city_long_name", &cityLongName);
 			msg->FindInt32("id", &cityId);
 			msg->FindDouble("latitude", &latitude);
 			msg->FindDouble("longitude", &longitude);
 
 			if (fForecastView->CityId() != cityId) {
 				fForecastView->SetCityName(cityName);
+				fForecastView->SetCityLongName(cityLongName);
 				fForecastView->SetCityId(cityId);
 				fForecastView->SetLatitude(latitude);
 				fForecastView->SetLongitude(longitude);

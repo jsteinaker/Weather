@@ -243,7 +243,8 @@ CitiesListSelectionWindow::MessageReceived(BMessage* msg)
 			BMessage* message = new BMessage(kUpdateCityMessage);
 			CityItem* cityItem
 				= dynamic_cast<CityItem*>(fCitiesListView->ItemAt(selected));
-			message->AddString("city", cityItem->Text());
+			message->AddString("city_long_name", cityItem->Text());
+			message->AddString("city", cityItem->City);
 			message->AddInt32("id", cityItem->Id);
 			message->AddString("country", cityItem->Country);
 			message->AddInt32("country_id", cityItem->CountryId);

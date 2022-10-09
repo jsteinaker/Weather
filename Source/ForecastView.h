@@ -147,6 +147,8 @@ status_t			SaveState(BMessage* into, bool deep = true) const;
 	void			StopReload();
 	void			SetCityName(BString city);
 	BString			CityName();
+	void			SetCityLongName(BString cityLongName);
+	BString			CityLongName();
 	void			SetCityId(int32 cityId);
 	int32			CityId();
 	void			SetLatitude(double latitude);
@@ -194,6 +196,7 @@ private:
 	bool			fReplicated;
 
 	BString			fCity;
+	BString			fCityLongName;
 	int32			fCityId;
 	int32			fUpdateDelay;
 	DisplayUnit		fDisplayUnit;
