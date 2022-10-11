@@ -38,6 +38,7 @@ private:
 	BString			fTemp;
 	BBitmap*		fIcon;
 	rgb_color		fTextColor;
+	float			fFontSize;
 };
 
 #endif // _FORECASTDAYVIEW_H_

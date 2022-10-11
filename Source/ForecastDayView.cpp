@@ -17,6 +17,7 @@ ForecastDayView::ForecastDayView(BRect frame)
 	fIcon(NULL)
 {
 	fTextColor = ui_color(B_PANEL_TEXT_COLOR);
+	fFontSize = BFont(be_plain_font).Size();
 }
 
 
@@ -108,7 +109,7 @@ ForecastDayView::Draw(BRect urect)
 {
 	BFont labelFont = be_bold_font;
 	font_height finfo;
-	labelFont.SetSize(labelFont.Size() * 1.2);
+	labelFont.SetSize(fFontSize * 1.2);
 	labelFont.GetHeight(&finfo);
 	SetFont(&labelFont);
 	rgb_color boxColor;
@@ -153,13 +154,13 @@ ForecastDayView::Draw(BRect urect)
 	else
 		SetDrawingMode(B_OP_COPY);
 	MovePenTo((Bounds().Width() - StringWidth(fDayLabel)) / 2,
-		20 + boxRect.top + (finfo.descent + finfo.leading) - 5);
+		(boxRect.top + boxBRect.bottom) / 2 + finfo.descent);
 	SetHighColor(color);
 	SetLowColor(tint_color(ViewColor(), 1.1));
 	DrawString(fDayLabel);
 
 	BFont tempFont = be_plain_font;
-	tempFont.SetSize(tempFont.Size() * 1.1);
+	tempFont.SetSize(fFontSize * 1.2);
 	tempFont.GetHeight(&finfo);
 	SetFont(&tempFont);
 	SetLowColor(tint_color(ViewColor(), 0.7));
@@ -176,16 +177,13 @@ ForecastDayView::Draw(BRect urect)
 
 	MovePenTo((Bounds().Width() - StringWidth(highString)) / 2,
 		boxRect.bottom - (finfo.descent + finfo.leading + space) * 2 - 5);
-
 	DrawString(highString);
 
-	MovePenTo((Bounds().Width() - StringWidth(lowString)) / 2,
-		boxRect.bottom - (finfo.descent + finfo.leading) - 5);
-
-	//tempFont.SetSize(fontSize * 0.95);
+	tempFont.SetSize(fFontSize);
 	tempFont.GetHeight(&finfo);
 	SetFont(&tempFont);
-
+	MovePenTo((Bounds().Width() - StringWidth(lowString)) / 2,
+		boxRect.bottom - (finfo.descent + finfo.leading) - 5);
 	DrawString(lowString);
 
 	if (fIcon) {

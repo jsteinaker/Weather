@@ -50,8 +50,6 @@ const int32 kReconnectionDelay = 5;
 
 extern const char* kSignature;
 
-float fontSize = BFont(be_plain_font).Size();
-
 #undef B_TRANSLATION_CONTEXT
 #define B_TRANSLATION_CONTEXT "ForecastView"
 
@@ -124,6 +122,8 @@ ForecastView::~ForecastView()
 void
 ForecastView::_Init()
 {
+	fFontSize = BFont(be_plain_font).Size();
+
 	_LoadBitmaps();
 	fCondition = 34;
 	// Icon for weather
@@ -134,21 +134,23 @@ ForecastView::_Init()
 
 	// Description (e.g. "Mostly showers", "Cloudy", "Sunny").
 	BFont bold_font(be_bold_font);
-	bold_font.SetSize(bold_font.Size() * 1.5);
+	bold_font.SetSize(fFontSize * 1.5);
 	fConditionView
 		= new LabelView("description", B_TRANSLATE("Loading" B_UTF8_ELLIPSIS));
 	fConditionView->SetFont(&bold_font);
+	fConditionView->SetAlignment(B_ALIGN_CENTER);
 
 	BFont plain_font(be_plain_font);
-	plain_font.SetSize(fontSize * 5);
+	plain_font.SetSize(fFontSize * 5);
 	// Temperature (e.g. high 32 degrees C)
 	fTemperatureView = new LabelView("temperature", "--");
 	fTemperatureView->SetFont(&plain_font);
 
 	// City
 	fCityView = new LabelView("city", "--");
-	plain_font.SetSize(fontSize * 2);
+	plain_font.SetSize(fFontSize);
 	fCityView->SetFont(&plain_font);
+	fCityView->SetAlignment(B_ALIGN_CENTER);
 	SetCityName(fCity);
 
 	fForecastView = new BGroupView(B_HORIZONTAL);
@@ -157,7 +159,7 @@ ForecastView::_Init()
 	forecastLayout->SetSpacing(2);
 
 	for (int32 i = 0; i < kMaxForecastDay; i++) {
-		fForecastDayView[i] = new ForecastDayView(BRect(0, 0, fontSize * 9, fontSize * 18));
+		fForecastDayView[i] = new ForecastDayView(BRect(0, 0, fFontSize * 4, fFontSize * 9));
 		fForecastDayView[i]->SetIcon(fFewClouds[SMALL_ICON]);
 		fForecastDayView[i]->SetDisplayUnit(fDisplayUnit);
 		forecastLayout->AddView(fForecastDayView[i]);
@@ -169,22 +171,18 @@ ForecastView::_Init()
 	BLayoutBuilder::Group<>(this, B_VERTICAL, 0)
 		.SetInsets(5, 5, 5, 5)
 		.AddGroup(B_VERTICAL)
-			.AddGroup(B_VERTICAL)
-				.AddGroup(B_HORIZONTAL)
-					.Add(fConditionButton)
-					.AddGroup(B_VERTICAL)
-						.Add(fTemperatureView)
-						.Add(fConditionView)
-						.Add(fCityView)
-						.End()
-					.End()
-				.Add(fForecastView)
+			.AddGroup(B_HORIZONTAL)
+				.Add(fConditionButton)
+				.Add(fTemperatureView)
 				.End()
+			.Add(fConditionView)
+			.Add(fCityView)
+			.Add(fForecastView)
 			.End()
-		.AddGroup(B_HORIZONTAL)
+		.AddGroup(B_HORIZONTAL, 0)
 			.AddGlue()
 			.Add(fDragger = new BDragger(this))
-			.End()
+			.End()	
 		.End();
 
 	SetViewColor(fBackgroundColor);
@@ -651,9 +649,9 @@ dummy_label:
 
 	if (data != NULL) {
 		
-		float smallIconSize = fontSize * 7;
-		float largeIconSize = fontSize * 15;
-		float deskbarIconSize = fontSize;
+		float smallIconSize = fFontSize * 3;
+		float largeIconSize = fFontSize * 7;
+		float deskbarIconSize = fFontSize;
 
 		BBitmap* smallBitmap = new BBitmap(
 			BRect(0, 0, smallIconSize - 1, smallIconSize - 1), 0, B_RGBA32);

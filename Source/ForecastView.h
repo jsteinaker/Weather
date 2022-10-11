@@ -261,6 +261,8 @@ private:
 	BDragger* 		fDragger;
 	rgb_color		fBackgroundColor;
 	rgb_color		fTextColor;
+	
+	float			fFontSize;
 };
 
 BString FormatString(DisplayUnit unit, int32 temp);
